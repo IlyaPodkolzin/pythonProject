@@ -24,7 +24,7 @@ def main(shader):
 
 
 def sdf_func(x, y):
-    return intersection(intersection(circle(x + 0.2, y + 0.2, 0.15), circle(x, y, 0.3)), circle(x - 0.2, y + 0.2, 0.15))
+    return union(circle(x, y, 0.3), circle(x + 0.2, y + 0.2, 0.15))
 
 
 def circle(x, y, radius):
@@ -44,17 +44,14 @@ def difference(func1, func2):
     return func1
 
 
-def intersection(func1, func2):
-    if func1 < 0 < func2:  # только func1
+def union(func1, func2):
+    if func1 < 0 < func2:
         return func1
-    if func2 < 0 < func1:  # только func2
+    if func1 < 0 and func2 < 0:
+        return min(-func2, func1)
+    if func2 < 0 < func1:
         return func2
-    if func1 < func2 < 0:  # ближе к func1
-        return func1 - func2
-    if func2 < func1 < 0:  # ближе к func2
-        return func2 - func1
-    return func1 + func2  # ни в каком
-
+    return 1
 
 
 def shader(x, y):
